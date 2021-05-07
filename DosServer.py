@@ -80,7 +80,7 @@ while True:
     # Establish connection
     connectionSocket, addr = serverSocket.accept()
     
-    print('Connected to: ' + addr[0] + ':' + str(addr[1]))
+    print('Connected to: ' + addr[0] + ': On port # ' + str(addr[1]))
     
     start_new_thread(singleThread, (connectionSocket, ))
     
