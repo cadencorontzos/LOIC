@@ -12,7 +12,14 @@ resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM
 # SOCK_STREAM for TCP, SOCK_DGRAM for UDP
 serverSocket = socket(AF_INET, SOCK_STREAM)
 numThreads = 0
-serverPort = 12000
+
+if len(sys.argv) == 2:
+    serverPort = int(sys.argv[1])
+else:
+    print ("Please format as follows:\n\n " + sys.argv[0] + " < Port Number > \n")
+    sys.exit(1)
+
+
 serverSocket.bind(('',serverPort))
 serverSocket.listen(5)
 
