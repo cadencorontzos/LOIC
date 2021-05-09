@@ -1,4 +1,12 @@
-# Import socket module
+#Author: Caden Corontzos
+#May 2021
+
+"""
+
+An HTTP server capable of handling multiple connections. This server only supports GET requests. It does this
+via multithreading. This is really only meant as an avenue for testing that does not involve breaking the law. 
+
+"""
 from socket import *
 import os
 from _thread import *

