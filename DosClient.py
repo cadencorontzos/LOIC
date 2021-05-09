@@ -2,8 +2,9 @@
 #May 2021
 
 """
+
 The goal of this program is to open a large number of connections and send a large number of requests, 
-with the intention of crashing the server. Each connection is opened as it's own thread. 
+with the intention of crashing the server. Each connection is opened as its own thread. 
 
 """
 

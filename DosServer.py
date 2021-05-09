@@ -7,6 +7,7 @@ An HTTP server capable of handling multiple connections. This server only suppor
 via multithreading. This is really only meant as an avenue for testing that does not involve breaking the law. 
 
 """
+
 from socket import *
 import os
 from _thread import *
@@ -24,6 +25,7 @@ numThreads = 0
 if len(sys.argv) == 2:
     serverPort = int(sys.argv[1])
 else:
+    #if the cl arugments are in wrong format, print and quit program
     print ("Please format as follows:\n\n " + sys.argv[0] + " < Port Number > \n")
     sys.exit(1)
 
@@ -39,12 +41,10 @@ def singleThread(connectionSocket):
         try:
             #Gets the request
             message = connectionSocket.recv(1024)
-            
             if not message:
                 break
-            
             message = message.decode()
-            #print(message)
+          
             #Finds and opens file
             filename = message.split()[1]
             contentLength = os.path.getsize(filename)
