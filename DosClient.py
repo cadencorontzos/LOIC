@@ -7,8 +7,6 @@ with the intention of crashing the server. Each connection is opened as it's own
 
 """
 
-
-
 from socket import *
 from _thread import *
 import threading

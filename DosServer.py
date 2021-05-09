@@ -13,14 +13,14 @@ from _thread import *
 import sys
 import resource
 
-
+#Allows more file opens than normal => more threads can be handled on the server
 resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY))
 
-# Prepare server socket
-# SOCK_STREAM for TCP, SOCK_DGRAM for UDP
+#sets a TCP socket
 serverSocket = socket(AF_INET, SOCK_STREAM)
 numThreads = 0
 
+#Gets server port from cli arguments
 if len(sys.argv) == 2:
     serverPort = int(sys.argv[1])
 else:
@@ -30,12 +30,11 @@ else:
 
 serverSocket.bind(('',serverPort))
 serverSocket.listen(5)
-
 print("Server is ready to recieve")
 
+#How the server communicates with a single connection
 def singleThread(connectionSocket):
-    pass
-
+    
     while True:
         try:
             #Gets the request
@@ -65,7 +64,7 @@ def singleThread(connectionSocket):
             connectionSocket.sendall(outputdata.encode())
             connectionSocket.send("\r\n".encode())
 
-          
+        #handles various exceptions that may occur  
         except ConnectionResetError:
             pass
             print('connection reset')
