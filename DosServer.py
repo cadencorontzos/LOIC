@@ -73,10 +73,11 @@ def singleThread(connectionSocket):
             print('broken pipe')
             
         except OSError as e:
-            print(e)
+            print("Too many connections, I'm struggling...")
+            
         except IOError:
-            e = sys.exc_info()[0]
-            print('in except '+str(e))
+            #e = sys.exc_info()[0]
+            #print('in except '+str(e))
 
             # Send 404 message
             try:

