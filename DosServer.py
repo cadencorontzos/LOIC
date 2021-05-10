@@ -13,13 +13,10 @@ import os
 from _thread import *
 import sys
 import resource
+import time
 
 #Allows more file opens than normal => more threads can be handled on the server
 resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY))
-
-#sets a TCP socket
-serverSocket = socket(AF_INET, SOCK_STREAM)
-numThreads = 0
 
 #Gets server port from cli arguments
 if len(sys.argv) == 2:
@@ -29,10 +26,17 @@ else:
     print ("Please format as follows:\n\n " + sys.argv[0] + " < Port Number > \n")
     sys.exit(1)
 
-
+#sets a TCP socket
+serverSocket = socket(AF_INET, SOCK_STREAM)
+numThreads = 0
 serverSocket.bind(('',serverPort))
 serverSocket.listen(5)
-print("Server is ready to recieve")
+print("Server is ready to recieve. Press ^C to quit.")
+
+
+startTime = time.time()
+getTimeElapsed = lambda startime:  time.time()-startTime
+allowedReqPerSec = 3
 
 #How the server communicates with a single connection
 def singleThread(connectionSocket):
@@ -43,7 +47,10 @@ def singleThread(connectionSocket):
             message = connectionSocket.recv(1024)
             if not message:
                 break
+          
             message = message.decode()
+
+            print(connectionSocket.addr)
           
             #Finds and opens file
             filename = message.split()[1]
@@ -51,10 +58,8 @@ def singleThread(connectionSocket):
             f = open(filename)
             outputdata = f.read()
 
-
             # Send one HTTP header line to socket
             connectionSocket.send('HTTP/1.1 200 OK\r\n'.encode())
-
 
             #Sends Content Length
             connectionSocket.send(('Content-Length: ' + str(contentLength) + " \r\n").encode())
@@ -72,9 +77,9 @@ def singleThread(connectionSocket):
             pass
             print('broken pipe')
             
-        except OSError as e:
+        except OSError:
             print("Too many connections, I'm struggling...")
-            
+
         except IOError:
             #e = sys.exc_info()[0]
             #print('in except '+str(e))
@@ -85,10 +90,6 @@ def singleThread(connectionSocket):
             except BrokenPipeError:
                 print('broken pipe on the 404')
                 pass
-
-            # Close client socket
-
-        
 
 #This loop will continue to make threads as clients connect
 while True:

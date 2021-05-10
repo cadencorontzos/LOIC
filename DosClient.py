@@ -14,7 +14,7 @@ import threading
 import resource
 import time
 import sys
-NETWORK_UNREACHABLE = 51
+
 
 #allows us to dictate the number of threads we want to start
 numThreads = 0
@@ -45,10 +45,9 @@ else:
 #simulates a single client
 def singleThread():
     try:
-       # print('in single thread')
+       #print('in single thread')
         clientSocket = socket(AF_INET, SOCK_STREAM)
-            
-
+        
         #Establishes socket
         clientSocket.connect((serverName, serverPort))
             
@@ -64,12 +63,12 @@ def singleThread():
     #these exceptions may happen if there are too many concurrent threads/there is a connection issue
     except ConnectionResetError:
         print('Connection reset by host')
-        numThreads-=1
+        
     except OSError as e:
-        numThreads-=1
+        pass
     except BrokenPipeError:
         print('Broken pipe: you may be starting too many threads too quickly. Increase the delay between threads')
-        numThreads-=1
+        
 
 #Opens the wanted number of connections
 print('Attack has begun. Press ^C to quit.\n')
