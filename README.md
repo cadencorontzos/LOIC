@@ -12,3 +12,7 @@ And the client runs as
     python3 DosClient.py < IP > < Port > < Number of Connections >
 
 Use ^C to quit either program.
+
+NOTE: On Windows, the resource module is not supported by default like on Mac and Linux. Comment out those lines in both the client and server(indicated with comments).
+
+There are some preventative measures built into the server. There are blocks of commented code that support these, uncomment to try.
