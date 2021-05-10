@@ -38,7 +38,7 @@ if len(sys.argv) == 4:
 else:
 
     #If user didn't format arguments correctly, quit program
-    print ("Please format as follows:\n\n " + sys.argv[0] + " < IP > < Port > < Number of Connections >\n")
+    print ("Please format as follows:\n\n " + sys.argv[0] + " < Server IP > < Server Port > < Number of Connections >\n")
     sys.exit(1)
 
 
@@ -62,13 +62,14 @@ def singleThread():
 
     #these exceptions may happen if there are too many concurrent threads/there is a connection issue
     except ConnectionResetError:
-        print('Connection reset by host')
-        
+        #print('Connection reset by host')
+        pass
+    
     except OSError as e:
         pass
+    
     except BrokenPipeError:
         print('Broken pipe: you may be starting too many threads too quickly. Increase the delay between threads')
-        
 
 #Opens the wanted number of connections
 print('Attack has begun. Press ^C to quit.\n')
@@ -76,5 +77,5 @@ while numThreads < numConnections:
 
     #starts a new single thread and then sleeps an appropriate ammt of time. Adjusting the sleep time affects the performance
     start_new_thread(singleThread, ())
-    time.sleep(.025)
+    time.sleep(.05)
     numThreads+=1

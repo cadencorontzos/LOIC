@@ -16,7 +16,7 @@ import resource         #resource module not supported on windows
 import time
 
 #Allows more file opens than normal => more threads can be handled on the server
-resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY)) #comment out on windows machines
+resource.setrlimit(resource.RLIMIT_NOFILE, (resource.RLIM_INFINITY,resource.RLIM_INFINITY)) #comment out on windows machines#
 
 #Gets server port from cli arguments
 if len(sys.argv) == 2:
